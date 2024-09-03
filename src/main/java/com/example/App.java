@@ -115,7 +115,7 @@ public class App {
         System.out.println("Starting Log Parser");
 
         Runnable task = () -> {
-            LogParser logParser = new LogParser(logFile, "WoWCombatLog-072424_140243.txt");
+            LogParser logParser = new LogParser(logFile, "WoWCombatLog-090324_135126.txt");
         };
 
         Thread thread = new Thread(task);
