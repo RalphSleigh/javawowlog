@@ -1,5 +1,7 @@
 package com.example;
 
+import static java.lang.StringTemplate.STR;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -11,7 +13,9 @@ import com.example.logitems.LogEvent;
 import com.example.logitems.LogFile;
 import com.example.parsers.AbstractParser;
 import com.example.parsers.EncounterStartParser;
+import com.example.parsers.SpellCastSuccessParser;
 import com.example.parsers.SpellDamageParser;
+import com.example.parsers.SpellSummonParser;
 import com.example.parsers.UnknownParser;
 import com.example.parsers.EncounterEndParser;
 
@@ -22,7 +26,9 @@ public class LogParser {
     static Map<String, AbstractParser> parsers = Map.of(
             "ENCOUNTER_START", new EncounterStartParser(),
             "ENCOUNTER_END", new EncounterEndParser(),
-            "SPELL_DAMAGE", new SpellDamageParser());
+            "SPELL_DAMAGE", new SpellDamageParser(),
+            "SPELL_CAST_SUCCESS", new SpellCastSuccessParser(),
+            "SPELL_SUMMON", new SpellSummonParser());
 
     static UnknownParser unknownParser = new UnknownParser();
 

@@ -1,0 +1,29 @@
+{
+  "name": "javawowlog",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RalphSleigh/javawowlog.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RalphSleigh/javawowlog/issues"
+  },
+  "homepage": "https://github.com/RalphSleigh/javawowlog#readme",
+  "dependencies": {
+    "esbuild": "^0.23.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.26.1",
+    "typescript": "^5.5.4"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.5"
+  }
+}

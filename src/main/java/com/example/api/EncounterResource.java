@@ -1,5 +1,8 @@
 package com.example.api;
 
+import java.util.List;
+import java.util.stream.IntStream;
+
 import com.example.logitems.LogFile;
 
 import jakarta.inject.Inject;
@@ -23,9 +26,11 @@ public class EncounterResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public LogFile getEncounters() {
+    public List<EncounterListItem> getEncounters() {
         try {
-        return logFile;
+            return IntStream.range(0, logFile.encounters.size())
+                    .mapToObj(i -> new EncounterListItem(i, logFile.encounters.get(i)))
+                    .toList();
         } catch (Exception e) {
             e.printStackTrace();
             throw new WebApplicationException(Response.Status.NOT_FOUND);
@@ -39,6 +44,21 @@ public class EncounterResource {
         try {
             var encounter = logFile.encounters.get(id);
             return new EncounterResponse(encounter);
+            } catch (IndexOutOfBoundsException e) {
+                throw new WebApplicationException(Response.Status.NOT_FOUND);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
+            }
+    }
+
+    @GET
+    @Path("{id}/{unitId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public UnitResponse getUnit(@PathParam("id") int id, @PathParam("unitId") String unitId) {
+        try {
+            var encounter = logFile.encounters.get(id);
+            return new UnitResponse(encounter, unitId);
             } catch (IndexOutOfBoundsException e) {
                 throw new WebApplicationException(Response.Status.NOT_FOUND);
             } catch (Exception e) {

@@ -14,25 +14,6 @@ import jakarta.ws.rs.ApplicationPath;
 import jakarta.ws.rs.ext.ContextResolver;
 import jakarta.ws.rs.ext.Provider;
 
-
-/* @ApplicationPath("api")
-public class JaxRsApplication extends Application {
-    private final Set<Object> objects;
-
-    public JaxRsApplication(LogFile logFile) {
-        HashSet<Object> c = new HashSet<Object>();
-        c.add(new EncounterResource(logFile));
-        objects = Collections.unmodifiableSet(c);
-    }
-
-    @Override
-    public Set<Object> getSingletons() {
-        return objects;
-    }
-} */
-// 'services', '/services', or '/services/*'
-// is all the same. Jersey will change it to be '/services/*'
-
 class Binder extends AbstractBinder {
     LogFile logFile;
     Binder(LogFile logFile) {

@@ -1,6 +1,5 @@
 package com.example.logitems;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.regex.Pattern;

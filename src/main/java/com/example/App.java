@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.nio.file.FileSystems;
+import java.util.ArrayList;
 
 import com.example.api.JerseyApplication;
 import com.example.logitems.LogFile;
@@ -23,9 +24,9 @@ import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 import com.sun.net.httpserver.SimpleFileServer;
 
+import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.UriBuilder;
 import jakarta.ws.rs.ext.RuntimeDelegate;
-
 
 /**
  * Hello world application using only the standard JAX-RS API and lightweight
@@ -54,17 +55,32 @@ public class App {
         }));
 
         // create a handler wrapping the JAX-RS application
-        HttpHandler handler = RuntimeDelegate.getInstance().createEndpoint(new JerseyApplication(logFile), HttpHandler.class);
-        var p =  FileSystems.getDefault().getPath("web").toAbsolutePath();
+        HttpHandler handler = RuntimeDelegate.getInstance().createEndpoint(new JerseyApplication(logFile),
+                HttpHandler.class);
+        var p = FileSystems.getDefault().getPath("web").toAbsolutePath();
         HttpHandler files = SimpleFileServer.createFileHandler(p);
         // map JAX-RS handler to the server root
-        server.createContext(getBaseURI().getPath()+"api/", handler).getFilters().add(logging());
+        server.createContext(getBaseURI().getPath()+ "encounter/", serveIndex()).getFilters().add(logging());
+        server.createContext(getBaseURI().getPath() + "api/", handler).getFilters().add(logging());
         server.createContext(getBaseURI().getPath(), files).getFilters().add(logging());
 
         // start the server
         server.start();
 
         return server;
+    }
+
+    private static HttpHandler serveIndex() {
+        return new HttpHandler() {
+            @Override
+            public void handle(HttpExchange http) throws IOException {
+                var p = FileSystems.getDefault().getPath("web", "index.html").toAbsolutePath();
+                var response = new String(java.nio.file.Files.readAllBytes(p));
+                http.sendResponseHeaders(200, response.length());
+                http.getResponseBody().write(response.getBytes());
+                http.close();
+            }
+        };
     }
 
     private static Filter logging() {
@@ -76,22 +92,22 @@ public class App {
                 } finally {
                     Object possibleRequestId = http.getAttribute(REQUEST_ID_KEY);
                     String requestId = possibleRequestId instanceof String ? (String) possibleRequestId : "unknown";
-                    if(http.getResponseCode() == 500) {
+                    if (http.getResponseCode() == 500) {
                         System.err.println(String.format("%s %s %s %s %s %s",
-                                              requestId,
-                                              http.getRequestMethod(),
-                                              http.getRequestURI().getPath(),
-                                              http.getRemoteAddress(),
-                                              http.getRequestHeaders().getFirst("User-Agent"),
-                                              http.getResponseCode()));
+                                requestId,
+                                http.getRequestMethod(),
+                                http.getRequestURI().getPath(),
+                                http.getRemoteAddress(),
+                                http.getRequestHeaders().getFirst("User-Agent"),
+                                http.getResponseCode()));
                     }
                     System.out.println(String.format("%s %s %s %s %s %s",
-                                              requestId,
-                                              http.getRequestMethod(),
-                                              http.getRequestURI().getPath(),
-                                              http.getRemoteAddress(),
-                                              http.getRequestHeaders().getFirst("User-Agent"),
-                                              http.getResponseCode()));
+                            requestId,
+                            http.getRequestMethod(),
+                            http.getRequestURI().getPath(),
+                            http.getRemoteAddress(),
+                            http.getRequestHeaders().getFirst("User-Agent"),
+                            http.getResponseCode()));
                 }
             }
 
@@ -104,13 +120,14 @@ public class App {
 
     public static void main(String[] args) throws IOException, InterruptedException {
 
-
-        /* Logger.getLogger("").setLevel(Level.FINEST);
-        Logger.getLogger("").getHandlers()[0].setLevel(Level.FINEST);
-        Logger logger = Logger.getLogger("org.glassfish.jersey.tracing");
-        logger.setLevel(Level.ALL);
-        logger.addHandler(new StreamHandler(System.out, new SimpleFormatter()));
-        logger.log(Level.FINEST, "test"); */
+        /*
+         * Logger.getLogger("").setLevel(Level.FINEST);
+         * Logger.getLogger("").getHandlers()[0].setLevel(Level.FINEST);
+         * Logger logger = Logger.getLogger("org.glassfish.jersey.tracing");
+         * logger.setLevel(Level.ALL);
+         * logger.addHandler(new StreamHandler(System.out, new SimpleFormatter()));
+         * logger.log(Level.FINEST, "test");
+         */
 
         System.out.println("Starting Log Parser");
 
