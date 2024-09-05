@@ -1,5 +1,7 @@
 package com.example.parsers;
 
+import java.time.Duration;
+
 import com.example.logitems.DamageEvent;
 import com.example.logitems.LogEvent;
 import com.example.logitems.LogFile;
@@ -10,8 +12,9 @@ public class SpellDamageParser extends AbstractParser {
         var target = logFile.currentEncounter.getUnitFromFields(event, 5);
         var spell =  logFile.currentEncounter.getSpellFromFields(event, 9);
         var amount = event.getInt(29);
-        source.damageDone.add(new DamageEvent(source, target, spell, amount));
-        target.damageTaken.add(new DamageEvent(source, target, spell, amount));
+        var timestamp = Duration.between(logFile.currentEncounter.startTime, event.getTimestamp());
+        var damageEvent = new DamageEvent(source, target, spell, amount, timestamp);
+        source.damageDone.add(damageEvent);
+        target.damageTaken.add(damageEvent);
     }
-    
 }

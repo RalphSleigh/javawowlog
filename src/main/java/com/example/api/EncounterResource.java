@@ -66,4 +66,21 @@ public class EncounterResource {
                 throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
             }
     }
+
+    @GET
+    @Path("{id}/{unitId}/{spellId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<SpellResponse> getSpell(@PathParam("id") int id, @PathParam("unitId") String unitId, @PathParam("spellId") String spellId) {
+        try {
+            var encounter = logFile.encounters.get(id);
+            var unit = encounter.units.get(unitId);
+            var spellidint = Integer.parseInt(spellId);
+            return SpellResponse.fromUnit(unit, spellidint);
+            } catch (IndexOutOfBoundsException e) {
+                throw new WebApplicationException(Response.Status.NOT_FOUND);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
+            }
+    }
 }

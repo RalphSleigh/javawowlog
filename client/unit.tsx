@@ -12,7 +12,6 @@ type Unit = {
     damageBySpell: Record<string, number>,
 }
 
-
 export const unitLoader = api<Unit>(p => `/api/encounters/${p.index}/${p.unitId}`)
 
 export const Unit = () => {
@@ -22,12 +21,12 @@ export const Unit = () => {
     const lines = Object.entries(data.damageBySpell)
         .sort((a, b) => b[1] - a[1])
         .map(([spellId, damage]) => {
-            return <tr><td><Link to={spellId}>{encounterData.spells[spellId].name}</Link></td><td>{damage}</td></tr>
+            return <tr key={spellId}><td><Link to={spellId}>{encounterData.spells[spellId].name}</Link></td><td>{damage}</td></tr>
         })
 
-    return <div>
+    return <><div>
         <table>
-        <thead>
+            <thead>
                 <tr>
                     <th>Spell</th>
                     <th>Damage</th>
@@ -38,4 +37,6 @@ export const Unit = () => {
             </tbody>
         </table>
     </div>
+        <Outlet />
+    </>
 }

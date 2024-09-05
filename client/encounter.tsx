@@ -1,6 +1,7 @@
 import React from "react";
 import { Link, Outlet, useLoaderData } from "react-router-dom";
 import { api } from "./fetcher";
+import { Table } from "@mantine/core";
 
 
 type Unit = {
@@ -29,22 +30,19 @@ export const Encounter = () => {
     const lines = Object.entries(data.damageDone)
     .filter(([unitId, damage]) => data.units[unitId].friendly)
     .sort((a, b)=> b[1] - a[1]).map(([unitId, damage]) => {
-        return <tr><td><Link to={unitId}>{data.units[unitId].name}</Link></td><td>{damage}</td></tr>
+        return <Table.Tr key={unitId}><Table.Td><Link to={unitId}>{data.units[unitId].name}</Link></Table.Td><Table.Td>{damage}</Table.Td></Table.Tr>
     })
 
-    return <div>
-        <h1>{data.name}</h1>
-        <table>
-            <thead>
-                <tr>
-                    <th>Unit</th>
-                    <th>Damage</th>
-                </tr>
-            </thead>
-            <tbody>
-                {lines}
-            </tbody>
-        </table>
-        <Outlet />
-    </div>
+    return <>
+    <Table>
+      <Table.Thead>
+        <Table.Tr>
+          <Table.Th>Unit</Table.Th>
+          <Table.Th>Damage</Table.Th>
+        </Table.Tr>
+      </Table.Thead>
+      <Table.Tbody>{lines}</Table.Tbody>
+    </Table>
+    <Outlet />
+    </>
 }

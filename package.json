@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/RalphSleigh/javawowlog#readme",
   "dependencies": {
+    "@mantine/core": "^7.12.2",
+    "@mantine/hooks": "^7.12.2",
     "esbuild": "^0.23.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -24,6 +26,10 @@
     "typescript": "^5.5.4"
   },
   "devDependencies": {
-    "@types/react": "^18.3.5"
+    "@types/react": "^18.3.5",
+    "esbuild-plugin-class-modules": "^2.1.9",
+    "postcss": "^8.4.45",
+    "postcss-preset-mantine": "^1.17.0",
+    "postcss-simple-vars": "^7.0.1"
   }
 }
